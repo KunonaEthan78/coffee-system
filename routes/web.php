@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Auth;
 
 // ✅ Admin + General Controllers
@@ -32,7 +33,7 @@ use App\Http\Controllers\Customer\OrderController as CustomerOrderController;
 use App\Models\WholesalerProduct;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/admin-dashboard');
 });
 
 
