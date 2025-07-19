@@ -1,5 +1,7 @@
 <?php return array (
+
   'barryvdh/laravel-dompdf' => 
+
   array (
     'aliases' => 
     array (
@@ -55,6 +57,7 @@
     'providers' => 
     array (
       0 => 'Livewire\\Volt\\VoltServiceProvider',
+
     ),
   ),
   'nesbot/carbon' => 
