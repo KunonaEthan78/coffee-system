@@ -33,7 +33,7 @@ use App\Http\Controllers\Customer\OrderController as CustomerOrderController;
 use App\Models\WholesalerProduct;
 
 Route::get('/', function () {
-    return redirect('/admin-dashboard');
+    return view('welcome');
 });
 
 
