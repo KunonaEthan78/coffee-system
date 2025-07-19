@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-# Auto detect text files and perform LF normalization
-* text=auto
-=======
 * text=auto eol=lf
 
 *.blade.php diff=html
@@ -10,7 +6,5 @@
 *.md diff=markdown
 *.php diff=php
 
-/.github export-ignore
 CHANGELOG.md export-ignore
-.styleci.yml export-ignore
->>>>>>> matooke-local/main
+README.md export-ignore
