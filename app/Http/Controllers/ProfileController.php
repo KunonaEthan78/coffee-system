@@ -33,7 +33,7 @@ class ProfileController extends Controller
     /**
      * Update user's name or email.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update(Request $request): RedirectResponse
     {
         $user = $request->user();
         $user->fill($request->validated());

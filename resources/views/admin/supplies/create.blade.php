@@ -6,7 +6,7 @@
 
     <form method="POST" action="{{ route('supplies.store') }}" class="bg-white p-6 rounded-lg shadow-md">
         @csrf
-
+@method('PATCH')
         <div class="mb-4">
             <label class="block font-semibold mb-1">Supplier</label>
             <select name="supplier_id" required class="w-full border-gray-300 rounded-lg shadow-sm">
