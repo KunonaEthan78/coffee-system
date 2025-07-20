@@ -87,7 +87,6 @@ Route::middleware(['auth'])->prefix('cooperative')->name('cooperative.')->group(
         Route::post('/', [CoffeeBatchController::class, 'store'])->name('store');
     });
 
-    // ☑ Supply Module Routes for Cooperative
     Route::resource('supplies', SupplyController::class)->names('supplies');
     Route::resource('suppliers', SupplierController::class)->names('suppliers');
     Route::resource('coffees', CoffeeController::class)->names('coffees');
@@ -114,7 +113,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.updateStatus');
     Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
 
-    // ☑ Supply Module Routes for Admin
+    // ✅ Added supplies dashboard route
+    Route::get('/supplies-dashboard', [SupplyController::class, 'index'])->name('supplies.dashboard');
+
     Route::resource('supplies', SupplyController::class)->names('supplies');
     Route::resource('suppliers', SupplierController::class)->names('suppliers');
     Route::resource('coffees', CoffeeController::class)->names('coffees');
