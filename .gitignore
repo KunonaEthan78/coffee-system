@@ -432,3 +432,4 @@ Thumbs.db
 >>>>>>> matooke-local/main
 =======
 >>>>>>> d010cf11 (inventory)
+database/migrations/2025_07_20_060619_create_suppliers_table.php
