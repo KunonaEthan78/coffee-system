@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Auth\LoginController;
 
 // ✅ Admin + General Controllers
 use App\Http\Controllers\AdminDashboardController;
@@ -30,18 +30,16 @@ use App\Http\Controllers\Customer\ProductController as CustomerProductController
 use App\Http\Controllers\Customer\CartController as CustomerCartController;
 use App\Http\Controllers\Customer\OrderController as CustomerOrderController;
 
-use App\Models\WholesalerProduct;
-
 // ✅ Supply Module Controllers
 use App\Http\Controllers\SupplyController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\CoffeeController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', fn () => view('welcome'));
 
+// -------------------------------
 // ✅ RETAILER ROUTES
+// -------------------------------
 Route::middleware(['auth'])->prefix('retailer')->name('retailer.')->group(function () {
     Route::get('/', fn() => view('retailer.retailer'))->name('dashboard');
 
@@ -62,13 +60,16 @@ Route::middleware(['auth'])->prefix('retailer')->name('retailer.')->group(functi
     Route::post('/wholesaler-cart/add', [WholesalerCartController::class, 'add'])->name('wholesaler.cart.add');
     Route::delete('/wholesaler-cart/remove/{id}', [WholesalerCartController::class, 'remove'])->name('wholesaler.cart.remove');
     Route::post('/wholesaler-cart/clear', [WholesalerCartController::class, 'clear'])->name('wholesaler.cart.clear');
+
     Route::get('/wholesaler-cart/checkout', [RetailerWholesalerOrderController::class, 'create'])->name('wholesaler.checkout');
     Route::post('/wholesaler-cart/checkout', [RetailerWholesalerOrderController::class, 'store'])->name('wholesaler.checkout.store');
     Route::get('/wholesaler-orders', [RetailerWholesalerOrderController::class, 'index'])->name('wholesaler.orders');
     Route::get('/wholesaler-orders/{order}/invoice', [RetailerWholesalerOrderController::class, 'generateInvoice'])->name('wholesaler.invoice');
 });
 
-// ✅ RETAILER → CUSTOMER ORDER ROUTES
+// -------------------------------
+// ✅ CUSTOMER ORDER ROUTES
+// -------------------------------
 Route::middleware(['auth'])->group(function () {
     Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
     Route::get('/checkout', [OrderController::class, 'create'])->name('orders.checkout');
@@ -77,9 +78,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/orders/{order}/invoice', [OrderController::class, 'generateInvoice'])->name('orders.invoice');
 });
 
+// -------------------------------
 // ✅ COOPERATIVE ROUTES
+// -------------------------------
 Route::middleware(['auth'])->prefix('cooperative')->name('cooperative.')->group(function () {
-    Route::get('/', fn() => view('cooperative.cooperative'))->name('dashboard');
+    Route::get('/', fn () => view('cooperative.cooperative'))->name('dashboard');
 
     Route::prefix('batches')->name('batches.')->group(function () {
         Route::get('/', [CoffeeBatchController::class, 'index'])->name('index');
@@ -92,10 +95,12 @@ Route::middleware(['auth'])->prefix('cooperative')->name('cooperative.')->group(
     Route::resource('coffees', CoffeeController::class)->names('coffees');
 });
 
+// -------------------------------
 // ✅ WHOLESALER ROUTES
+// -------------------------------
 Route::middleware(['auth'])->prefix('wholesaler')->name('wholesaler.')->group(function () {
     Route::get('/', function () {
-        $products = WholesalerProduct::where('wholesaler_id', Auth::id())->latest()->get();
+        $products = \App\Models\WholesalerProduct::where('wholesaler_id', Auth::id())->latest()->get();
         return view('wholesaler.wholesaler', compact('products'));
     })->name('dashboard');
 
@@ -106,28 +111,33 @@ Route::middleware(['auth'])->prefix('wholesaler')->name('wholesaler.')->group(fu
     Route::post('/orders/{order}/status', [WholesalerOrderController::class, 'updateStatus'])->name('orders.updateStatus');
 });
 
+// -------------------------------
 // ✅ ADMIN ROUTES
+// -------------------------------
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
     Route::post('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.updateStatus');
     Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
 
-    // ✅ Added supplies dashboard route
     Route::get('/supplies-dashboard', [SupplyController::class, 'index'])->name('supplies.dashboard');
-
     Route::resource('supplies', SupplyController::class)->names('supplies');
     Route::resource('suppliers', SupplierController::class)->names('suppliers');
     Route::resource('coffees', CoffeeController::class)->names('coffees');
+
+    // Admin profile routes
+    Route::get('/', [ProfileController::class, 'edit'])->name('edit');
+    Route::patch('/', [ProfileController::class, 'update'])->name('update');
+    Route::delete('/', [ProfileController::class, 'destroy'])->name('destroy');
 });
 
+// -------------------------------
 // ✅ CUSTOMER ROUTES
+// -------------------------------
 Route::middleware(['auth'])->prefix('customer')->name('customer.')->group(function () {
-    Route::get('/', fn() => view('customer.customer'))->name('dashboard');
+    Route::get('/', fn () => view('customer.customer'))->name('dashboard');
 
     Route::get('/products', [CustomerProductController::class, 'index'])->name('products');
-    Route::post('/customer/cart/add', [CustomerCartController::class, 'add'])->name('customer.cart.add');
-
     Route::get('/cart', [CustomerCartController::class, 'index'])->name('cart');
     Route::post('/cart/add', [CustomerCartController::class, 'add'])->name('cart.add');
     Route::delete('/cart/remove/{id}', [CustomerCartController::class, 'remove'])->name('cart.remove');
@@ -139,7 +149,18 @@ Route::middleware(['auth'])->prefix('customer')->name('customer.')->group(functi
     Route::get('/orders/{order}/invoice', [CustomerOrderController::class, 'generateInvoice'])->name('orders.invoice');
 });
 
-// ✅ ROLE-BASED REDIRECT AFTER LOGIN
+// -------------------------------
+// ✅ PROFILE ROUTES (for profile.update)
+// -------------------------------
+Route::middleware(['auth'])->prefix('profile')->name('profile.')->group(function () {
+    Route::get('/', [ProfileController::class, 'edit'])->name('edit');
+    Route::patch('/', [ProfileController::class, 'update'])->name('update');
+    Route::delete('/', [ProfileController::class, 'destroy'])->name('destroy');
+});
+
+// -------------------------------
+// ✅ REDIRECT BASED ON USER ROLE AFTER LOGIN
+// -------------------------------
 Route::get('/redirect-after-login', function () {
     $user = Auth::user();
 
@@ -149,17 +170,8 @@ Route::get('/redirect-after-login', function () {
     if ($user->role === 'wholesaler') return redirect()->route('wholesaler.dashboard');
     if ($user->role === 'customer') return redirect()->route('customer.dashboard');
 
-    return redirect()->route('dashboard');
+    return redirect('/');
 })->middleware('auth');
 
-// ✅ GENERAL DASHBOARD & PROFILE
-Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
-    // other admin routes...
-
-    Route::get('/', [ProfileController::class, 'edit'])->name('edit');
-    Route::patch('/', [ProfileController::class, 'update'])->name('update');
-    Route::delete('/', [ProfileController::class, 'destroy'])->name('destroy');
-});
-
+// ✅ Laravel Auth Routes
 require __DIR__.'/auth.php';
