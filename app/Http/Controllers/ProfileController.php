@@ -23,12 +23,15 @@ class ProfileController extends Controller
     /**
      * Show edit profile form.
      */
-    public function edit(Request $request): View
-    {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
-    }
+   public function edit(Request $request): View
+{
+    $users = \App\Models\User::all(); // BAD: Loads everything into memory
+
+    return view('profile.edit', [
+        'user' => $request->user(),
+        'users' => $users,
+    ]);
+}
 
     /**
      * Update user's name or email.
