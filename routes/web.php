@@ -9,7 +9,6 @@ use App\Http\Controllers\AdminOrderController;
 use App\Http\Controllers\Admin\ReportsController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
-
 use App\Http\Controllers\Admin\ExportController;
 
 // ✅ Retailer Controllers
@@ -31,12 +30,12 @@ use App\Http\Controllers\Customer\ProductController as CustomerProductController
 use App\Http\Controllers\Customer\CartController as CustomerCartController;
 use App\Http\Controllers\Customer\OrderController as CustomerOrderController;
 
-use App\Models\WholesalerProduct;
-
 // ✅ Supply Module Controllers
 use App\Http\Controllers\SupplyController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\CoffeeController;
+
+use App\Models\WholesalerProduct;
 
 Route::get('/', function () {
     return view('welcome');
@@ -88,6 +87,7 @@ Route::middleware(['auth'])->prefix('cooperative')->name('cooperative.')->group(
         Route::post('/', [CoffeeBatchController::class, 'store'])->name('store');
     });
 
+    // ✅ Supply Module Routes for Cooperative
     Route::resource('supplies', SupplyController::class)->names('supplies');
     Route::resource('suppliers', SupplierController::class)->names('suppliers');
     Route::resource('coffees', CoffeeController::class)->names('coffees');
@@ -113,6 +113,13 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
     Route::post('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.updateStatus');
     Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
+    Route::get('/admin/analytics', [AdminDashboardController::class, 'analytics'])->name('analytics');
+
+
+    // ✅ Supply Module Routes for Admin
+    Route::resource('supplies', SupplyController::class);
+    Route::resource('suppliers', SupplierController::class);
+    Route::resource('coffees', CoffeeController::class);
 });
 
 
@@ -157,21 +164,3 @@ Route::middleware('auth')->prefix('profile')->name('profile.')->group(function (
 });
 
 require __DIR__.'/auth.php';
-use App\Http\Controllers\SupplyController;
-use App\Http\Controllers\SupplierController;
-use App\Http\Controllers\CoffeeController;
-
-Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-    // Supply Module Routes
-    Route::resource('supplies', SupplyController::class);
-    Route::resource('suppliers', SupplierController::class);
-    Route::resource('coffees', CoffeeController::class);
-});
-Route::middleware(['auth'])->prefix('cooperative')->name('cooperative.')->group(function () {
-    // existing cooperative routes...
-
-    // Supply Module Routes
-    Route::resource('supplies', SupplyController::class);
-    Route::resource('suppliers', SupplierController::class);
-    Route::resource('coffees', CoffeeController::class);
-});
