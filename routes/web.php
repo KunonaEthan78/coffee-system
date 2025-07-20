@@ -162,3 +162,21 @@ Route::middleware('auth')->prefix('profile')->name('profile.')->group(function (
 
 
 require __DIR__.'/auth.php';
+use App\Http\Controllers\SupplyController;
+use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\CoffeeController;
+
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    // Supply Module Routes
+    Route::resource('supplies', SupplyController::class);
+    Route::resource('suppliers', SupplierController::class);
+    Route::resource('coffees', CoffeeController::class);
+});
+Route::middleware(['auth'])->prefix('cooperative')->name('cooperative.')->group(function () {
+    // existing cooperative routes...
+
+    // Supply Module Routes
+    Route::resource('supplies', SupplyController::class);
+    Route::resource('suppliers', SupplierController::class);
+    Route::resource('coffees', CoffeeController::class);
+});
