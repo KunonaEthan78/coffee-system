@@ -114,34 +114,38 @@ class HarvestBatchController extends Controller
      */
     public function edit(string $id)
     {
-        $batch = HarvestBatch::findOrFail($id);
-        $farms = Farm::all();
-        $grades = CoffeeGrade::all();
-
-        return view('harvest-batches.edit', compact('batch', 'farms', 'grades'));
-    }
+       $batch = HarvestBatch::findOrFail($id);
+    $grades = CoffeeGrade::all(); // if you're letting them change grade
+    return view('harvest-batches.edit', compact('batch', 'grades'));
+}
 
     /**
      * Update batch
      */
-    public function update(Request $request, string $id)
-    {
-        $batch = HarvestBatch::findOrFail($id);
+    public function update(Request $request, $id)
+{
+    $harvestBatch = HarvestBatch::findOrFail($id);
 
-        $validated = $request->validate([
-            'farm_id' => 'required|exists:farms,id',
-            'coffee_grade_id' => 'required|exists:coffee_grades,id',
-            'harvest_date' => 'required|date',
-            'quantity_kg' => 'required|integer',
-            'status' => 'required|string',
-            'processing_method' => 'required|string',
-        ]);
+    // Optional: Validate the request
+    $request->validate([
+        'quantity_kg' => 'required|numeric',
+        'coffee_grade_id' => 'required|exists:coffee_grades,id',
+        'harvest_date' => 'required|date',
+        'status' => 'required|string',
+    ]);
 
-        $batch->update($validated);
+    $harvestBatch->update($request->only([
+        'quantity_kg',
+        'coffee_grade_id',
+        'harvest_date',
+        'status',
+        'notes',
+    ]));
 
-        return redirect()->route('harvest-batches.index')
-                         ->with('success', 'Batch updated successfully');
-    }
+    // ✅ Redirect to your inventory dashboard
+    return redirect()->route('admin.inventory-dashboard')->with('success', 'Harvest batch updated successfully.');
+}
+
 
     /**
      * Delete batch
@@ -153,6 +157,9 @@ class HarvestBatchController extends Controller
 
         return redirect()->route('harvest-batches.index')
                          ->with('success', 'Batch deleted successfully');
+                         $batch = HarvestBatch::findOrFail($id);
+    $batch->delete();
+    return redirect()->route('harvest-batches.index')->with('success', 'Batch deleted successfully.');
     }
 
     /**

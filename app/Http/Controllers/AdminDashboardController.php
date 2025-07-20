@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\User;
 use App\Models\Product;
+use App\Models\HarvestBatch;
+
 
 class AdminDashboardController extends Controller
 {
@@ -31,4 +33,14 @@ class AdminDashboardController extends Controller
         ));
            
     }
+    public function inventory() {
+    $batches = HarvestBatch::with('coffeeGrade')->get();
+    return view('admin.inventory-dashboard', compact('batches'));
+}
+
+
+
+
+
+
 }

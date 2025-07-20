@@ -5,11 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\HarvestBatch;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+
+
 
 class HarvestBatch extends Model
 {
     
-
+use SoftDeletes;
 
     use HasFactory;
     // ...existing code...
@@ -35,6 +39,9 @@ class HarvestBatch extends Model
     public function coffeeGrade()
     {
         return $this->belongsTo(CoffeeGrade::class);
+        
+        
+
     }
 
     public function transactions()
