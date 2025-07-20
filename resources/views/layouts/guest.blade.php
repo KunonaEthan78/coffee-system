@@ -1,30 +1,79 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+@extends('layouts.guest')
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+@section('content')
+<style>
+    body {
+        background: url('/images/bg.jpg') no-repeat center center fixed;
+        background-size: cover;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    .register-box {
+        max-width: 500px;
+        margin: 80px auto;
+        padding: 40px;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
 
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-gray-900">
-            <div>
-                <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-                </a>
-            </div>
+    .register-box h2 {
+        margin-bottom: 30px;
+        font-weight: bold;
+        text-align: center;
+        color: #8B4513;
+    }
 
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
-                {{ $slot }}
-            </div>
+    .form-control {
+        border-radius: 10px;
+    }
+
+    .btn-golden {
+        background-color: #d4af37;
+        color: white;
+        font-weight: bold;
+        border-radius: 10px;
+    }
+
+    .btn-golden:hover {
+        background-color: #b9982d;
+    }
+</style>
+
+<div class="register-box">
+    <h2>Register to Golden Bean</h2>
+    <form method="POST" action="{{ route('register') }}">
+        @csrf
+
+        <div class="mb-3">
+            <label for="name" class="form-label">Full Name</label>
+            <input id="name" class="form-control" type="text" name="name" value="{{ old('name') }}" required autofocus>
+            @error('name') <small class="text-danger">{{ $message }}</small> @enderror
         </div>
-    </body>
-</html>
+
+        <div class="mb-3">
+            <label for="email" class="form-label">Email Address</label>
+            <input id="email" class="form-control" type="email" name="email" value="{{ old('email') }}" required>
+            @error('email') <small class="text-danger">{{ $message }}</small> @enderror
+        </div>
+
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input id="password" class="form-control" type="password" name="password" required>
+            @error('password') <small class="text-danger">{{ $message }}</small> @enderror
+        </div>
+
+        <div class="mb-3">
+            <label for="password_confirmation" class="form-label">Confirm Password</label>
+            <input id="password_confirmation" class="form-control" type="password" name="password_confirmation" required>
+        </div>
+
+        <button type="submit" class="btn btn-golden w-100">Create Account</button>
+    </form>
+
+    <p class="mt-3 text-center">
+        Already have an account?
+        <a href="{{ route('login') }}">Login here</a>
+    </p>
+</div>
+@endsection
