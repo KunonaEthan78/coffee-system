@@ -116,12 +116,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     
 
-});Route::get('/admin/export/orders-ml', [App\Http\Controllers\AdminOrderController::class, 'exportOrdersForML'])->name('admin.export.orders.ml');
-
-
-Route::get('/admin/export/products-sales', [App\Http\Controllers\AdminOrderController::class, 'exportProductSales'])->name('admin.export.product.sales');
-
-Route::get('/admin/export-orders', [ExportController::class, 'exportOrderData'])->name('admin.export.orders');
+});
 
 
     Route::get('/admin/analytics', [AdminDashboardController::class, 'analytics'])->name('admin.analytics');
