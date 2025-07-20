@@ -7,9 +7,10 @@ use App\Models\Order;
 
 class AdminOrderController extends Controller
 {
-    public function index()
-    {
-        $orders = Order::with('user', 'items.product')->latest()->get();
+    public function index(){
+       
+        $orders = Order::with('user', 'items.product')->latest()->paginate(15);
+
         return view('admin.orders.index', compact('orders'));
     }
 
@@ -25,8 +26,4 @@ class AdminOrderController extends Controller
         return back()->with('success', 'Order status updated.');
 
     }
-
-    
-      
-
 }

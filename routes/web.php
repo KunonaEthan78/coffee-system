@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Auth;
 
 // ✅ Admin + General Controllers
@@ -10,6 +9,8 @@ use App\Http\Controllers\AdminOrderController;
 use App\Http\Controllers\Admin\ReportsController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
+
+use App\Http\Controllers\Admin\ExportController;
 
 // ✅ Retailer Controllers (CORRECT NAMESPACE)
 use App\Http\Controllers\Retailer\RetailerProductController;
@@ -112,7 +113,18 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
     Route::post('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.updateStatus');
     Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
-});
+
+    
+
+});Route::get('/admin/export/orders-ml', [App\Http\Controllers\AdminOrderController::class, 'exportOrdersForML'])->name('admin.export.orders.ml');
+
+
+Route::get('/admin/export/products-sales', [App\Http\Controllers\AdminOrderController::class, 'exportProductSales'])->name('admin.export.product.sales');
+
+Route::get('/admin/export-orders', [ExportController::class, 'exportOrderData'])->name('admin.export.orders');
+
+
+    Route::get('/admin/analytics', [AdminDashboardController::class, 'analytics'])->name('admin.analytics');
 
 
 // ✅ CUSTOMER ROUTES
@@ -160,23 +172,4 @@ Route::middleware('auth')->prefix('profile')->name('profile.')->group(function (
     Route::delete('/', [ProfileController::class, 'destroy'])->name('destroy');
 });
 
-
 require __DIR__.'/auth.php';
-use App\Http\Controllers\SupplyController;
-use App\Http\Controllers\SupplierController;
-use App\Http\Controllers\CoffeeController;
-
-Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-    // Supply Module Routes
-    Route::resource('supplies', SupplyController::class);
-    Route::resource('suppliers', SupplierController::class);
-    Route::resource('coffees', CoffeeController::class);
-});
-Route::middleware(['auth'])->prefix('cooperative')->name('cooperative.')->group(function () {
-    // existing cooperative routes...
-
-    // Supply Module Routes
-    Route::resource('supplies', SupplyController::class);
-    Route::resource('suppliers', SupplierController::class);
-    Route::resource('coffees', CoffeeController::class);
-});
