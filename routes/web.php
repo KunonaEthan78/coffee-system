@@ -12,7 +12,7 @@ use App\Http\Controllers\ProfileController;
 
 use App\Http\Controllers\Admin\ExportController;
 
-// ✅ Retailer Controllers (CORRECT NAMESPACE)
+// ✅ Retailer Controllers
 use App\Http\Controllers\Retailer\RetailerProductController;
 use App\Http\Controllers\Retailer\CartController as RetailerCartController;
 use App\Http\Controllers\Retailer\WholesalerCartController;
@@ -33,24 +33,25 @@ use App\Http\Controllers\Customer\OrderController as CustomerOrderController;
 
 use App\Models\WholesalerProduct;
 
+// ✅ Supply Module Controllers
+use App\Http\Controllers\SupplyController;
+use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\CoffeeController;
+
 Route::get('/', function () {
     return view('welcome');
 });
-
 
 // ✅ RETAILER ROUTES
 Route::middleware(['auth'])->prefix('retailer')->name('retailer.')->group(function () {
     Route::get('/', fn() => view('retailer.retailer'))->name('dashboard');
 
-    // Retailer Products
     Route::get('/products', [RetailerProductController::class, 'index'])->name('products');
     Route::get('/products/create', [RetailerProductController::class, 'create'])->name('products.create');
     Route::post('/products', [RetailerProductController::class, 'store'])->name('products.store');
 
-    // Browse wholesaler products
     Route::get('/wholesaler-products', [WholesalerProductBrowseController::class, 'showWholesalerProducts'])->name('wholesaler.products');
 
-    // Retailer Cart
     Route::get('/cart', [RetailerCartController::class, 'index'])->name('cart');
     Route::post('/cart/add', [RetailerCartController::class, 'add'])->name('cart.add');
     Route::post('/cart/increase/{id}', [RetailerCartController::class, 'increase'])->name('cart.increase');
@@ -58,7 +59,6 @@ Route::middleware(['auth'])->prefix('retailer')->name('retailer.')->group(functi
     Route::delete('/cart/remove/{id}', [RetailerCartController::class, 'remove'])->name('cart.remove');
     Route::post('/cart/clear', [RetailerCartController::class, 'clear'])->name('cart.clear');
 
-    // Wholesaler Cart (Retailer)
     Route::get('/wholesaler-cart', [WholesalerCartController::class, 'index'])->name('wholesaler.cart');
     Route::post('/wholesaler-cart/add', [WholesalerCartController::class, 'add'])->name('wholesaler.cart.add');
     Route::delete('/wholesaler-cart/remove/{id}', [WholesalerCartController::class, 'remove'])->name('wholesaler.cart.remove');
@@ -69,7 +69,6 @@ Route::middleware(['auth'])->prefix('retailer')->name('retailer.')->group(functi
     Route::get('/wholesaler-orders/{order}/invoice', [RetailerWholesalerOrderController::class, 'generateInvoice'])->name('wholesaler.invoice');
 });
 
-
 // ✅ RETAILER → CUSTOMER ORDER ROUTES
 Route::middleware(['auth'])->group(function () {
     Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
@@ -78,7 +77,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}/invoice', [OrderController::class, 'generateInvoice'])->name('orders.invoice');
 });
-
 
 // ✅ COOPERATIVE ROUTES
 Route::middleware(['auth'])->prefix('cooperative')->name('cooperative.')->group(function () {
@@ -89,8 +87,11 @@ Route::middleware(['auth'])->prefix('cooperative')->name('cooperative.')->group(
         Route::get('/create', [CoffeeBatchController::class, 'create'])->name('create');
         Route::post('/', [CoffeeBatchController::class, 'store'])->name('store');
     });
-});
 
+    Route::resource('supplies', SupplyController::class)->names('supplies');
+    Route::resource('suppliers', SupplierController::class)->names('suppliers');
+    Route::resource('coffees', CoffeeController::class)->names('coffees');
+});
 
 // ✅ WHOLESALER ROUTES
 Route::middleware(['auth'])->prefix('wholesaler')->name('wholesaler.')->group(function () {
@@ -106,20 +107,13 @@ Route::middleware(['auth'])->prefix('wholesaler')->name('wholesaler.')->group(fu
     Route::post('/orders/{order}/status', [WholesalerOrderController::class, 'updateStatus'])->name('orders.updateStatus');
 });
 
-
 // ✅ ADMIN ROUTES
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
     Route::post('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.updateStatus');
     Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
-
-    
-
 });
-
-
-    Route::get('/admin/analytics', [AdminDashboardController::class, 'analytics'])->name('admin.analytics');
 
 
 // ✅ CUSTOMER ROUTES
@@ -127,10 +121,7 @@ Route::middleware(['auth'])->prefix('customer')->name('customer.')->group(functi
     Route::get('/', fn() => view('customer.customer'))->name('dashboard');
 
     Route::get('/products', [CustomerProductController::class, 'index'])->name('products');
-
-    
-
-    Route::post('/customer/cart/add', [App\Http\Controllers\Customer\CartController::class, 'add'])->name('customer.cart.add');
+    Route::post('/customer/cart/add', [CustomerCartController::class, 'add'])->name('customer.cart.add');
 
     Route::get('/cart', [CustomerCartController::class, 'index'])->name('cart');
     Route::post('/cart/add', [CustomerCartController::class, 'add'])->name('cart.add');
@@ -142,7 +133,6 @@ Route::middleware(['auth'])->prefix('customer')->name('customer.')->group(functi
     Route::get('/orders', [CustomerOrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}/invoice', [CustomerOrderController::class, 'generateInvoice'])->name('orders.invoice');
 });
-
 
 // ✅ ROLE-BASED REDIRECT AFTER LOGIN
 Route::get('/redirect-after-login', function () {
@@ -157,7 +147,6 @@ Route::get('/redirect-after-login', function () {
     return redirect()->route('dashboard');
 })->middleware('auth');
 
-
 // ✅ GENERAL DASHBOARD & PROFILE
 Route::get('/dashboard', fn() => view('dashboard'))->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -168,3 +157,21 @@ Route::middleware('auth')->prefix('profile')->name('profile.')->group(function (
 });
 
 require __DIR__.'/auth.php';
+use App\Http\Controllers\SupplyController;
+use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\CoffeeController;
+
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    // Supply Module Routes
+    Route::resource('supplies', SupplyController::class);
+    Route::resource('suppliers', SupplierController::class);
+    Route::resource('coffees', CoffeeController::class);
+});
+Route::middleware(['auth'])->prefix('cooperative')->name('cooperative.')->group(function () {
+    // existing cooperative routes...
+
+    // Supply Module Routes
+    Route::resource('supplies', SupplyController::class);
+    Route::resource('suppliers', SupplierController::class);
+    Route::resource('coffees', CoffeeController::class);
+});
