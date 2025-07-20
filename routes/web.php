@@ -160,6 +160,7 @@ Route::middleware('auth')->prefix('profile')->name('profile.')->group(function (
     Route::delete('/', [ProfileController::class, 'destroy'])->name('destroy');
 });
 
+
 require __DIR__.'/auth.php';
 use App\Http\Controllers\SupplyController;
 use App\Http\Controllers\SupplierController;
