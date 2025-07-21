@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('role')->default('retailer')->after('email');
+        Schema::table('harvest_batches', function (Blueprint $table) {
+            $table->softDeletes(); // adds nullable deleted_at column
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('role');
+        Schema::table('harvest_batches', function (Blueprint $table) {
+              $table->dropSoftDeletes();
         });
     }
 };
