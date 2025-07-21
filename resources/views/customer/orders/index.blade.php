@@ -26,7 +26,7 @@
                     <ul class="list-group mt-3">
                         @foreach($order->items as $item)
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                {{ $item->product->name }}
+                                {{ $item->product?->name }}
                                 <span>Qty: {{ $item->quantity }} × UGX {{ number_format($item->price) }}</span>
                             </li>
                         @endforeach

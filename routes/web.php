@@ -46,9 +46,9 @@ Route::get('/', function () {
 Route::get('/', fn () => view('welcome'));
 
 
-// -------------------------------
+
 // ✅ RETAILER ROUTES
-// -------------------------------
+
 Route::middleware(['auth'])->prefix('retailer')->name('retailer.')->group(function () {
     Route::get('/', fn() => view('retailer.retailer'))->name('dashboard');
 
@@ -76,9 +76,9 @@ Route::middleware(['auth'])->prefix('retailer')->name('retailer.')->group(functi
     Route::get('/wholesaler-orders/{order}/invoice', [RetailerWholesalerOrderController::class, 'generateInvoice'])->name('wholesaler.invoice');
 });
 
-// -------------------------------
+
 // ✅ CUSTOMER ORDER ROUTES
-// -------------------------------
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
     Route::get('/checkout', [OrderController::class, 'create'])->name('orders.checkout');
@@ -87,9 +87,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/orders/{order}/invoice', [OrderController::class, 'generateInvoice'])->name('orders.invoice');
 });
 
-// -------------------------------
+
 // ✅ COOPERATIVE ROUTES
-// -------------------------------
+
 Route::middleware(['auth'])->prefix('cooperative')->name('cooperative.')->group(function () {
     Route::get('/', fn () => view('cooperative.cooperative'))->name('dashboard');
 
@@ -105,9 +105,9 @@ Route::middleware(['auth'])->prefix('cooperative')->name('cooperative.')->group(
     Route::resource('coffees', CoffeeController::class)->names('coffees');
 });
 
-// -------------------------------
+
 // ✅ WHOLESALER ROUTES
-// -------------------------------
+
 Route::middleware(['auth'])->prefix('wholesaler')->name('wholesaler.')->group(function () {
     Route::get('/', function () {
         $products = \App\Models\WholesalerProduct::where('wholesaler_id', Auth::id())->latest()->get();
@@ -121,9 +121,9 @@ Route::middleware(['auth'])->prefix('wholesaler')->name('wholesaler.')->group(fu
     Route::post('/orders/{order}/status', [WholesalerOrderController::class, 'updateStatus'])->name('orders.updateStatus');
 });
 
-// -------------------------------
-// ✅ ADMIN ROUTES
-// -------------------------------
+
+// ADMIN ROUTES
+
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
@@ -146,15 +146,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('suppliers', SupplierController::class)->names('suppliers');
     Route::resource('coffees', CoffeeController::class)->names('coffees');
 
-    // Admin profile routes
-    Route::get('/', [ProfileController::class, 'edit'])->name('edit');
-    Route::patch('/', [ProfileController::class, 'update'])->name('update');
-    Route::delete('/', [ProfileController::class, 'destroy'])->name('destroy');
+   
 
 
 
 
-
+// CUSTOMER ROUTES
 Route::middleware(['auth'])->prefix('customer')->name('customer.')->group(function () {
     Route::get('/', fn () => view('customer.customer'))->name('dashboard');
 
@@ -180,7 +177,7 @@ Route::middleware(['auth'])->prefix('profile')->name('profile.')->group(function
 });
 
 
-
+// REDIRECT BASED ON USER 
 
 Route::get('/redirect-after-login', function () {
     $user = Auth::user();

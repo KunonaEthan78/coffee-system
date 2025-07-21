@@ -33,7 +33,7 @@
                 <ul class="list-group mb-3">
                     @foreach($order->items as $item)
                         <li class="list-group-item d-flex justify-content-between">
-                            <span>{{ $item->product->name }} × {{ $item->quantity }}</span>
+                            <span>{{ $item->product?->name }} × {{ $item->quantity }}</span>
                             <span class="text-muted">UGX {{ number_format($item->price * $item->quantity) }}</span>
                         </li>
                     @endforeach
