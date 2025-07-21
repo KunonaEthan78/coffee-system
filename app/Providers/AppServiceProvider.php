@@ -18,8 +18,5 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void
-    {
-        ini_set('memory_limit', '1024M'); 
-    }
+    
 }
