@@ -60,6 +60,12 @@ return [
             'report' => false,
         ],
 
+        'vendor_docs' => [
+            'driver' => 'local',
+            'root' => storage_path('app/vendor_documents'),
+            'throw' => false,
+        ]
+    ,
     ],
 
     /*
