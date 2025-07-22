@@ -13,7 +13,9 @@ return new class extends Migration
     {
         // Add column to harvest_batches table
         Schema::table('harvest_batches', function (Blueprint $table) {
+            if (!Schema::hasColumn('harvest_batches', 'harvest_date')) {
             $table->date('harvest_date')->nullable();
+            }
         });
 
         // Create suppliers table

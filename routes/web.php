@@ -33,6 +33,9 @@ use App\Models\WholesalerProduct;
 use App\Http\Controllers\VendorController;
 
 
+
+
+
 Route::get('/', function () {
     return view('welcome');
 });
