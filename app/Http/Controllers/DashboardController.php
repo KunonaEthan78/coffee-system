@@ -16,4 +16,13 @@ class DashboardController extends Controller
             'farms' => Farm::all(),
         ]);
     }
+    
+
+public function dashboard()
+{
+    $harvestBatches = HarvestBatch::with('coffeeGrade')->get();
+
+    return view('dashboard', compact('harvestBatches'));
+}
+
 }

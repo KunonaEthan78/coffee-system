@@ -1,55 +1,58 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto px-4 py-6">
-    <h2 class="text-xl font-bold mb-4">Edit Harvest Batch</h2>
+<div class="container">
+    <h3>Edit Batch</h3>
 
-    <form method="POST" action="{{ route('harvest-batches.update', $batch->id) }}">
-        @csrf
-        @method('PUT')
+    <form action="{{ route('harvest-batches.update', $batch->id) }}" method="POST">
+    @csrf
+    @method('PUT')
 
-        <div class="mb-4">
-            <label for="farm_id" class="block font-medium">Farm</label>
-            <select name="farm_id" class="w-full border px-3 py-2 rounded">
-                @foreach($farms as $farm)
-                    <option value="{{ $farm->id }}" {{ $batch->farm_id == $farm->id ? 'selected' : '' }}>{{ $farm->name }}</option>
-                @endforeach
-            </select>
-        </div>
+    <!-- Quantity (kg) -->
+    <div class="mb-3">
+        <label for="quantity_kg" class="form-label">Quantity (kg)</label>
+        <input type="number" step="0.01" class="form-control" id="quantity_kg" name="quantity_kg" 
+               value="{{ old('quantity_kg', $batch->quantity_kg) }}" required>
+    </div>
 
-        <div class="mb-4">
-            <label for="coffee_grade_id" class="block font-medium">Coffee Grade</label>
-            <select name="coffee_grade_id" class="w-full border px-3 py-2 rounded">
-                @foreach($grades as $grade)
-                    <option value="{{ $grade->id }}" {{ $batch->coffee_grade_id == $grade->id ? 'selected' : '' }}>{{ $grade->name }}</option>
-                @endforeach
-            </select>
-        </div>
+    <!-- Coffee Grade -->
+    <div class="mb-3">
+        <label for="coffee_grade_id" class="form-label">Coffee Grade</label>
+        <select class="form-select" id="coffee_grade_id" name="coffee_grade_id" required>
+            @foreach($grades as $grade)
+                <option value="{{ $grade->id }}" 
+                    {{ $batch->coffee_grade_id == $grade->id ? 'selected' : '' }}>
+                    {{ $grade->name }}
+                </option>
+            @endforeach
+        </select>
+    </div>
 
-        <div class="mb-4">
-            <label for="harvest_date" class="block font-medium">Harvest Date</label>
-            <input type="date" name="harvest_date" value="{{ $batch->harvest_date }}" class="w-full border px-3 py-2 rounded">
-        </div>
+    <!-- Harvest Date -->
+    <div class="mb-3">
+        <label for="harvest_date" class="form-label">Harvest Date</label>
+        <input type="date" class="form-control" id="harvest_date" name="harvest_date" 
+               value="{{ old('harvest_date', $batch->harvest_date ? $batch->harvest_date->format('Y-m-d') : '') }}">
+    </div>
 
-        <div class="mb-4">
-            <label for="quantity_kg" class="block font-medium">Quantity (kg)</label>
-            <input type="number" name="quantity_kg" value="{{ $batch->quantity_kg }}" class="w-full border px-3 py-2 rounded">
-        </div>
+    <!-- Status -->
+    <div class="mb-3">
+        <label for="status" class="form-label">Status</label>
+        <select class="form-select" id="status" name="status">
+            <option value="In Stock" {{ old('status', $batch->status) == 'In Stock' ? 'selected' : '' }}>In Stock</option>
+            <option value="Low Stock" {{ old('status', $batch->status) == 'Low Stock' ? 'selected' : '' }}>Low Stock</option>
+            <option value="Out of Stock" {{ old('status', $batch->status) == 'Out of Stock' ? 'selected' : '' }}>Out of Stock</option>
+        </select>
+    </div>
 
-        <div class="mb-4">
-            <label for="status" class="block font-medium">Status</label>
-            <select name="status" class="w-full border px-3 py-2 rounded">
-                <option value="in_storage" {{ $batch->status == 'in_storage' ? 'selected' : '' }}>In Storage</option>
-                <option value="shipped" {{ $batch->status == 'shipped' ? 'selected' : '' }}>Shipped</option>
-            </select>
-        </div>
+    <!-- Notes -->
+    <div class="mb-3">
+        <label for="notes" class="form-label">Notes</label>
+        <textarea class="form-control" id="notes" name="notes" rows="3">{{ old('notes', $batch->notes) }}</textarea>
+    </div>
 
-        <div class="mb-4">
-            <label for="processing_method" class="block font-medium">Processing Method</label>
-            <input type="text" name="processing_method" value="{{ $batch->processing_method }}" class="w-full border px-3 py-2 rounded">
-        </div>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>
 
-        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Update Batch</button>
-    </form>
 </div>
 @endsection

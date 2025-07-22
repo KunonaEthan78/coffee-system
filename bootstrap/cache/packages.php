@@ -1,5 +1,6 @@
 <?php return array (
   'barryvdh/laravel-dompdf' => 
+
   array (
     'aliases' => 
     array (
@@ -12,10 +13,16 @@
     ),
   ),
   'laravel/breeze' => 
+
   array (
+    'aliases' => 
+    array (
+      'PDF' => 'Barryvdh\\DomPDF\\Facade\\Pdf',
+      'Pdf' => 'Barryvdh\\DomPDF\\Facade\\Pdf',
+    ),
     'providers' => 
     array (
-      0 => 'Laravel\\Breeze\\BreezeServiceProvider',
+      0 => 'Barryvdh\\DomPDF\\ServiceProvider',
     ),
   ),
   'laravel/pail' => 
@@ -37,13 +44,6 @@
     'providers' => 
     array (
       0 => 'Laravel\\Tinker\\TinkerServiceProvider',
-    ),
-  ),
-  'laravel/ui' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Laravel\\Ui\\UiServiceProvider',
     ),
   ),
   'livewire/livewire' => 
