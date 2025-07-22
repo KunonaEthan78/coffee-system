@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'java_server' => [
+        'url' => env('JAVA_SERVER_URL', 'http://localhost:8080'),
+        'timeout' => 30,
+    ],
+
 ];

@@ -30,6 +30,8 @@ use App\Http\Controllers\Customer\CartController as CustomerCartController;
 use App\Http\Controllers\Customer\OrderController as CustomerOrderController;
 
 use App\Models\WholesalerProduct;
+use App\Http\Controllers\VendorController;
+
 
 
 
@@ -160,6 +162,14 @@ Route::middleware('auth')->prefix('profile')->name('profile.')->group(function (
     Route::get('/', [ProfileController::class, 'edit'])->name('edit');
     Route::patch('/', [ProfileController::class, 'update'])->name('update');
     Route::delete('/', [ProfileController::class, 'destroy'])->name('destroy');
+});
+
+Route::middleware(['auth', 'vendor.role'])->group(function () {
+    Route::get('/vendor/application', [VendorController::class, 'showApplication'])
+        ->name('vendor.application');
+
+    Route::post('/vendor/submit-application', [VendorController::class, 'submitApplication'])
+        ->name('vendor.submit');
 });
 
 require __DIR__.'/auth.php';
