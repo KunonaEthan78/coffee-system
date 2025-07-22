@@ -248,7 +248,7 @@
                 <p class="coffee-subheader">From Uganda's Fertile Highlands to the World's Finest Cups</p>
                 
                 <div class="welcome-message">
-                    "Uganda's coffee is like liquid gold, nurtured by the red volcanic soils of the Rwenzori and Elgon Mountains. 
+                    "Uganda's coffee is like liquid gold, nurtured by the red volcanic soils of the Rwenzori and Elgon Mountain. 
                     This system honors every hand that cultivates, harvests, and transports our treasured beans."
                 </div>
                 
