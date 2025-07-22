@@ -292,13 +292,13 @@
         <div class="input-group">  
             <label for="name">Full Name</label>  
             <i class="fas fa-user input-icon"></i>  
-            <input type="text" id="name" name="name" placeholder="John Coffee Farmer" required autofocus>  
+            <input type="text" id="name" name="name" placeholder="Coffee Farmer" required autofocus>  
         </div>  
 
         <div class="input-group">  
             <label for="email"> Email</label>  
             <i class="fas fa-envelope input-icon"></i>  
-            <input type="email" id="email" name="email" placeholder="your.cooperative@uganda.coffee" required>  
+            <input type="email" id="email" name="email" placeholder="your.account@uganda.coffee" required>  
         </div>  
 
         <div class="input-group">  
